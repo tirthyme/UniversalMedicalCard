@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Main CSS-->
+    <link rel="stylesheet" type="text/css" href= "{{ url_for('static',filename='css/main.css') }}">
+    <!-- Font-icon css-->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>User-Register</title>
+  </head>
+  <body>
+    <section class="material-half-bg">
+      <div class="cover"></div>
+    </section>
+    <section class="login-content">
+        <h1>Universal Medical Card</h1>
+      <div class="login-box" style="height: 180vh;width: 30vh;margin-top:30px;">
+        <form class="login-form">
+          <h3 class="login-head"><i class="fa fa-lg fa-fw fa-user"></i>User-Register</h3>
+          <div class="form-group">
+            <label class="control-label">Name</label>
+            <input class="form-control" type="text" id="uname" placeholder="Enter Name" autofocus required>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Email</label>
+            <input class="form-control" type="email" id="email" placeholder="Email" required>
+          </div>
+           <div class="form-group">
+            <label class="control-label">Phone</label>
+            <input class="form-control" type="Text" id="phn" placeholder="Phone" required>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Gender</label><br>
+           <input class="form-check-input" id="rdo_m" type="radio" name="gender" value="Male" checked="True" style="margin-right: 5px;margin-left: 5px;"><label style="margin-left:20px;">Male</label>
+            <input class="form-check-input" id="rdo_m" type="radio" name="gender" value="Female" checked="True" style="margin-left: 5px;"><label style="margin-left:20px;">Female</label>
+          </div>
+         <div class="form-group">
+                    <label for="city_id">Select City</label>
+                    <select class="form-control" id="city_id">
+                      <option>Ahmedabad</option>
+                      <option>Mehsana</option>            
+                    </select>
+         </div>
+         <div class="form-group">
+                    <label for="state_id">Select State</label>
+                    <select class="form-control" id="state_id">
+                      <option>Gujarat</option>
+                      <option>Maharashtra</option>            
+         </select>
+         </div>
+         <div class="form-group">
+                    <label for="cntry_id">Select Country</label>
+                    <select class="form-control" id="cntry_id">
+                      <option>India</option>
+                      <option>Maharashtra</option>            
+         </select>
+         </div>
+         <div class="form-group">
+                    <label for="pfp">Profile Picture</label>
+                    <input class="form-control-file" id="pfp" type="file" aria-describedby="fileHelp"></div>
+          <div class="form-group">
+                    <label for="pfp">BirthDate</label>
+                    <input class="form-control" id="date" type="date" aria-describedby="fileHelp"></div>
+             <div class="form-group">
+            <label class="control-label">Username</label>
+            <input class="form-control" type="Text" id="phn" placeholder="Username" required>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Password</label>
+            <input class="form-control" type="Password" id="password" placeholder="Password" required>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Confirm Password</label>
+            <input class="form-control" type="Password" id="c_password" placeholder="Confirm Password" required>
+          </div>
+          <div class="form-group btn-container">
+            <button class="btn btn-primary btn-block" id="b1" onclick="f1()"><i class="fa fa-sign-in fa-lg fa-fw"></i>Register as Traveller</button>
+          </div>
+
+        </form>
+        </form>
+      </div>
+    </section>
+    <!-- Essential javascripts for application to work-->
+    <script src={{ url_for('static',filename="js/jquery-3.2.1.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/popper.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/bootstrap.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/main.js") }}></script>    
+    <!-- The javascript plugin to display page loading on top-->
+    <script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>  
+    <!-- The javascript plugin to display page loading on top-->
+    <script src="js/plugins/pace.min.js"></script>
+    <script type="text/javascript">
+     function f1 () {
+       swal("Congratulations", "You are registered!", "success");
+     }
+     </script>
+  </body>
+</html>
