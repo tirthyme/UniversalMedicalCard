@@ -1,6 +1,9 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, session
+from flask_session import Session
 from Utilities import Database
 from flask_wtf.csrf import CSRFProtect
+from admin import routes as admin_routes
+
 
 app = Flask(__name__)
 csrf = CSRFProtect(app)
@@ -8,6 +11,11 @@ csrf.init_app(app)
 app.config.update(
     SECRET_KEY = 'you-will-never-guess'
 )
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
+
+app.register_blueprint(admin_routes.admin_bp)
 
 @app.route('/')
 def hello(): 
@@ -25,7 +33,7 @@ def hello():
 
 @app.route('/register')
 def register():
-    return render_template("userregistration.html")
+    return render_template("userregistration1.html")
     
 @app.route('/login',methods=['GET','POST'])
 def login():
@@ -43,8 +51,9 @@ def login():
                 return render_template('page-login.html',context = context)
             cur = cur.fetchone()
             print(cur)
-            return redirect(url_for('admin'))
-
-@app.route('/admin',methods=['GET'])
-def admin():
-    return render_template('utilities/admin_panel.html')
+            session["logged"] = True
+            session["email"] = cur["email"]
+            session["name"] = cur["uname"]
+            if cur["usertype"] == 0:
+                session["role"] = "Superuser"
+            return redirect(url_for('admin_bp.admin'))

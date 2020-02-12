@@ -14,7 +14,7 @@
     <section class="material-half-bg">
       <div class="cover"></div>
     </section>
-    <section class="login-content">
+    <section class="login-content" style="background-color: black;background-blend-mode:lighten;">
         <h1>Universal Medical Card</h1>
       <div class="login-box" style="height: 180vh;width: 30vh;margin-top:30px;">
         <form class="login-form">
@@ -89,9 +89,8 @@
     <script src={{ url_for('static',filename="js/bootstrap.min.js") }}></script>
     <script src={{ url_for('static',filename="js/main.js") }}></script>    
     <!-- The javascript plugin to display page loading on top-->
-    <script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>  
+    <script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>
     <!-- The javascript plugin to display page loading on top-->
-    <script src="js/plugins/pace.min.js"></script>
     <script type="text/javascript">
      function f1 () {
        swal("Congratulations", "You are registered!", "success");

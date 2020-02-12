@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Main CSS-->
+    <link rel="stylesheet" type="text/css" href= "{{ url_for('static',filename='css/main.css') }}">
+    <!-- Font-icon css-->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>User-Register</title>
+  </head>
+  <body>
+    <section class="material-half-bg">
+      <div class="cover"></div>
+    </section>
+    <div class="container">
+      <br>
+      <br>
+      <br>
+      <br>
+      <style type="text/css">
+        label{
+          font-size: 15px;
+        }
+      </style>
+      <div class="row">
+        <div class="col-lg-12 col-md-12">
+          <div class="heading-title text-center">
+            <h2 class="title iq-tw-6 iq-font-white">User Registration</h2>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-md-center">
+        <div class="col-md-8">
+          <div class="iq-login iq-pt-40 iq-pb-30 iq-plr-30">
+            <form action="tripcreateprocess.php" method="POST">
+              <div class="form-group">
+                <label class="iq-font-white">Name</label>
+                <input type="text" class="form-control" name="uname" placeholder="Name Required" maxlength="80">
+              </div>
+              <div class="form-group">
+                <label class="control-label">Gender</label><br>
+                <input type="radio" name="gender" value="Male" style="position: absolute; width: 50px; height: 30px;"><label style="margin-left: 50px;margin-right: 10px; font-size: 18px;">Male</label>
+                <input type="radio" name="gender" value="Female" style="position: absolute; width: 50px; height: 30px;"><label style="margin-left:50px;margin-right: 30px; font-size: 18px;">Female</label>
+                <input type="radio" name="gender" value="Both" checked="True" style="position: absolute; width: 50px; height: 30px;"><label style="margin-left:50px;margin-right: 30px; font-size: 18px;">Other</label>
+              </div>
+              <div class="form-group">
+                <label class="iq-font-white">Aadhar</label>
+                <input type="text" class="form-control" name="aadhar" placeholder="Aadhar Required" maxlength="80">
+              </div>
+              <div class="form-group">
+                <label class="iq-font-white">Phone</label>
+                <input type="text" class="form-control" name="phone" placeholder="Phone Required" maxlength="10">
+              </div>
+              <div class="form-group iq-mt-20">
+                <div class="row iq-mt-30">
+                  <div class="col-sm-3">
+                    <label class="iq-font-white" >State of Residence</label>
+                    <select class="form-control" style="width: 100%;" name="state">
+                      <option value="1">Gujarat</option>
+                      <option value="2">Maharashtra</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-3">
+                    <label class="iq-font-white" >City</label>
+                    <select class="form-control" style="width: 100%;" name="city">
+                      <option value="1">Ahmedabad</option>
+                      <option value="2">Mumbai</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-3">
+                    <label class="iq-font-white" >Area</label>
+                    <select class="form-control" style="width: 100%;" name="area">
+                      <option value="1">Paldi</option>
+                      <option value="2">Mumbai</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-3">
+                    <label class="iq-font-white" >Pincode</label>
+                    <select class="form-control" style="width: 100%;" name="pincode">
+                      <option value="1">380007</option>
+                      <option value="2">322200</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-12 mt-2">
+                  <label class="iq-font-white">Address</label>
+                  <textarea class="form-control" name="addr" placeholder="Address Required" maxlength="150" required></textarea>
+                </div>
+                </div>
+              </div>
+              <div class="form-group iq-mt-20">
+                <div class="row iq-mt-30">
+                  <div class="col-sm-12">
+                    <label class="iq-font-white" >Birth Date</label>
+                    <input type="date" class="form-control" id="sdte" name="startdte" min="" required style="text-align: center;">
+                  </div>
+              </div>
+              <div class="form-group iq-mt-20">
+              </div>
+              <button type="submit" class="button iq-mt-15" name="submit">Submit</button>
+            </form>
+
+            <div class="text-right iq-mtb-10">
+              <div class="iq-font-white iq-tw-6">Already a User?</div><a href="/login" class="iq-font-green iq-tw-6 link">Login Now</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Essential javascripts for application to work-->
+    <script src={{ url_for('static',filename="js/jquery-3.2.1.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/popper.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/bootstrap.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/main.js") }}></script>    
+    <!-- The javascript plugin to display page loading on top-->
+    <script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>
+    <script type="text/javascript">
+                      var today = new Date();
+                      var dd = today.getDate();
+                      var mm = today.getMonth()+1; //January is 0!
+                      var yyyy = today.getFullYear();
+                      if(dd<10){
+                        dd='0'+dd
+                      } 
+                      if(mm<10){
+                        mm='0'+mm
+                      } 
+                      yyyy1 = yyyy+2; 
+                      dd1 = dd+1;
+                      today = yyyy+'-'+mm+'-'+dd;
+                      $(document).ready(function(){
+                        $("#sdte").attr("max", today);
+                      });
+                    </script>
+  </body>
+</html>
