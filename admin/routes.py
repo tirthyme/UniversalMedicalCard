@@ -4,6 +4,18 @@ from Utilities import Database
 
 admin_bp = Blueprint('admin_bp',__name__,template_folder="templates",static_folder="static")
 
+
+
+def get_connection():
+    return Database.DB.make_connection(Database.DB())
+
+def set_user_data():
+    context = {}
+    context["name"] = session["name"]
+    context["role"] = session["role"]
+    context["email"] = session["email"]
+    return context
+
 @admin_bp.route('/admin',methods=['GET'])
 def admin():
     db = get_connection()
@@ -29,13 +41,3 @@ def viewusers():
     print(cur.rowcount)
     context["user_data"] = cur.fetchall()
     return render_template("view_users.html",context = context)
-
-def set_user_data():
-    context = {}
-    context["name"] = session["name"]
-    context["role"] = session["role"]
-    context["email"] = session["email"]
-    return context
-
-def get_connection():
-    return Database.DB.make_connection(Database.DB())

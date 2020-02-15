@@ -11,6 +11,4 @@ class DB:
                              cursorclass=pymysql.cursors.DictCursor)
             except Exception as error:
                 print(error)
-            return db   
-            
-           
+            return db
