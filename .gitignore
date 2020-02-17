@@ -4,3 +4,7 @@
 
 #session
 /flask_session/
+
+#vscode
+
+/.vscode/
