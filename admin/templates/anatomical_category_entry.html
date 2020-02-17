@@ -1,0 +1,43 @@
+
+{% extends "admin_panel_navigation_template.html" %}
+
+{% block pagetype %} <i class="fa fa-laptop"></i> Anatomical Disease Category Entry {% endblock%}
+
+{% block maincontent %}
+<section class="login-content" style="min-height:None;">
+       <section class="login-content">
+      <div class="center-block">
+        <h1>Universal Medical Card</h1>
+      </div>
+      <div class="login-box">
+        <form class="login-form" action="{{url_for("admin_bp.anatcatadd")}}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <h3 class="login-head">Anatomical Disease Category Entry</h3>
+          <div class="form-group">
+            <label class="control-label"> Anatomical Disease Category Name </label>
+            <input class="form-control" type="text" placeholder="Anatomical Category" name="anatcat" autofocus required>
+          </div>
+          <div class="form-group btn-container">
+            <button name="btn" class="btn btn-primary btn-block"><i class="fa fa-sign-in fa-lg fa-database"></i>Enter</button>
+          </div>
+        </form>
+      </div>
+    </section>
+    <!-- Essential javascripts for application to work-->
+    <script src={{ url_for('static',filename="js/jquery-3.2.1.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/popper.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/bootstrap.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/main.js") }}></script>    
+    <!-- The javascript plugin to display page loading on top-->
+    <script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>    
+    <script src={{ url_for('static',filename="js/plugins/jquery.dataTables.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/plugins/dataTables.bootstrap.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/plugins/sweetalert.min.js") }}></script>
+    {% if request.args.get('inserted') ==  "true" %}        
+                <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+                <script>swal ("", "Anatomical Category Inserted" ,  "success" )</script>  
+        {% endif %}
+{% endblock %}
+
+  
+

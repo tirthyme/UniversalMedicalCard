@@ -83,7 +83,6 @@ def register():
     else:
         return "WRONG METHOD"
         
-        
 
     
 @app.route('/login',methods=['GET','POST'])
@@ -108,4 +107,4 @@ def login():
             session["name"] = cur["uname"]
             if cur["usertype"] == 0:
                 session["role"] = "Superuser"
-            return redirect(url_for('admin_bp.admin'))
+                return redirect(url_for('admin_bp.admin'))

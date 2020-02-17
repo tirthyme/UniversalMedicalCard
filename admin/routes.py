@@ -1,13 +1,15 @@
-from flask import Blueprint, render_template,session
+from flask import Blueprint, render_template,session, request, redirect, url_for, json, session
 from flask import current_app as app
-from Utilities import Database
+from Utilities import Database, Operations
+
 
 admin_bp = Blueprint('admin_bp',__name__,template_folder="templates",static_folder="static")
 
 
-
+op = Operations.Operations()
 def get_connection():
     return Database.DB.make_connection(Database.DB())
+    
 
 def set_user_data():
     context = {}
@@ -15,6 +17,7 @@ def set_user_data():
     context["role"] = session["role"]
     context["email"] = session["email"]
     return context
+
 
 @admin_bp.route('/admin',methods=['GET'])
 def admin():
@@ -30,10 +33,10 @@ def admin():
     context.update(set_user_data())
     return render_template("admin_panel.html",context = context)
 
+
 @admin_bp.route('/admin/viewusers', methods=['GET'])
 def viewusers():
     context = {}
-    context.update(set_user_data())
     db = get_connection()
     q = "select * from user_master"
     cur = db.cursor()
@@ -41,3 +44,163 @@ def viewusers():
     print(cur.rowcount)
     context["user_data"] = cur.fetchall()
     return render_template("view_users.html",context = context)
+
+
+@admin_bp.route('/admin/stateadd',methods=['GET','POST'])
+def stateadd():
+    if request.method == 'GET':
+        return render_template('state_entry.html')
+    else:
+        db = get_connection()
+        cur = db.cursor()
+        state = request.form.get("state")
+        q = "insert into state_master(state_name) values (%s)"
+        state = op.filter_data(state, "string")
+        try:
+            cur.execute(q,(state))
+            db.commit()
+            cur.close()
+            db.close()
+            return redirect(url_for("admin_bp.stateadd",inserted="true"))
+        except Database.pymysql.MySQLError as error:
+            print(error)
+            db.rollback()
+            cur.close()
+            db.close()
+            return "ERROR"
+
+
+@admin_bp.route('/admin/symptomsadd',methods=['GET','POST'])
+def symptomsadd():
+    if request.method == 'GET':
+        return render_template('symptoms_entry.html')
+    else:
+        db = get_connection()
+        cur = db.cursor()
+        symptom = request.form.get("symptom")
+        sever = request.form.get("sever")
+        q = "insert into symptom_master(symptom_name,severity) values (%s,%s)"
+        symptom = op.filter_data(symptom, "string")
+        sever = op.filter_data(sever, "string")
+        try:
+            cur.execute(q,(symptom,int(sever)))
+            db.commit()
+            cur.close()
+            db.close()
+            return redirect(url_for("admin_bp.symptomsadd",inserted="true"))
+        except Database.pymysql.MySQLError as error:
+            print(error)
+            db.rollback()
+            cur.close()
+            db.close()
+            return "ERROR"
+
+
+@admin_bp.route('/admin/diseaseadd',methods=['GET','POST'])
+def diseaseadd():
+    if request.method == 'GET':
+        db = get_connection()
+        cur = db.cursor()
+        q = "select * from symptom_master"
+        cur.execute(q)
+        data = cur.fetchall()
+        context = {}
+        context['symptoms'] = data
+        q = "select * from anatomical_disease_category_master"
+        cur.execute(q)
+        data = cur.fetchall()
+        context['anatomicald'] = data
+        q = "select * from global_disease_category_master"
+        cur.execute(q)
+        data = cur.fetchall()
+        context['globald'] = data
+        return render_template('disease_entry.html', context = context)
+    else:
+        db = get_connection()
+        cur = db.cursor()
+        disease = request.form.get("disease")
+        sever = request.form.get("sever")
+        globald = request.form.get('global')
+        symptoms = request.form.getlist('symptoms')
+        anatomical = request.form.get('anatomical')
+        q = "insert into disease_master(disease_name, severity, anatomical_cat_id, global_d_id) values (%s,%s,%s,%s)"
+        disease = op.filter_data(disease, "string")
+        globald = op.filter_data(globald, "string")
+        anatomical = op.filter_data(anatomical, "string")
+        sever = op.filter_data(sever, "string")
+        try:
+            cur.execute(q,(disease,int(sever),anatomical,globald))
+            try:
+                did = cur.lastrowid
+                for sid in symptoms:
+                    q1 = "insert into disease_symptom_mapper(disease_id,symptom_id) values(%s,%s)"
+                    cur1 = db.cursor()
+                    cur1.execute(q1,(did,sid))
+            except Database.pymysql.MySQLError as e:
+                print(e)
+                db.rollback()
+                cur.close()
+                db.close()
+                return "ERROR"
+            cur.close()
+            cur1.close()
+            db.commit()
+            db.close()
+            return redirect(url_for("admin_bp.diseaseadd",inserted="true"))
+        except Database.pymysql.MySQLError as error:
+            print(error)
+            db.rollback()
+            cur.close()
+            db.close()
+            return "ERROR"
+
+
+@admin_bp.route('/admin/anatomicalcategoryadd',methods=['GET','POST'])
+def anatcatadd():
+    if request.method == 'GET':
+        return render_template('anatomical_category_entry.html')
+    else:
+        db = get_connection()
+        cur = db.cursor()
+        anatcat = request.form.get("anatcat")
+        q = "insert into anatomical_disease_category_master(anatomical_cat_name) values (%s)"
+        anatcat = op.filter_data(anatcat, "string")
+        try:
+            cur.execute(q,(anatcat))
+            db.commit()
+            cur.close()
+            db.close()
+            return redirect(url_for("admin_bp.anatcatadd",inserted="true"))
+        except Database.pymysql.MySQLError as error:
+            print(error)
+            db.rollback()
+            cur.close()
+            db.close()
+            return "ERROR"
+
+
+@admin_bp.route('/admin/globalcategoryadd',methods=['GET','POST'])
+def globcatadd():
+    if request.method == 'GET':
+        return render_template('global_d_category_entry.html')
+    else:
+        db = get_connection()
+        cur = db.cursor()
+        globcat = request.form.get("globcat")
+        q = "insert into global_disease_category_master(global_d_name) values (%s)"
+        globcat = op.filter_data(globcat, "string")
+        try:
+            cur.execute(q,(globcat))
+            db.commit()
+            cur.close()
+            db.close()
+            return redirect(url_for("admin_bp.globcatadd",inserted="true"))
+        except Database.pymysql.MySQLError as error:
+            print(error)
+            db.rollback()
+            cur.close()
+            db.close()
+            return "ERROR"
+
+
+

@@ -1,5 +1,4 @@
 import pymysql
-
 class DB:
         def make_connection(self):
             try:

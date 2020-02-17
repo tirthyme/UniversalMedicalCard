@@ -1,0 +1,80 @@
+
+{% extends "admin_panel_navigation_template.html" %}
+
+{% block pagetype %} <i class="fa fa-laptop"></i> Disease Entry {% endblock%}
+
+{% block maincontent %}
+<section class="login-content" style="min-height:None;">
+       <section class="login-content">
+      <div class="center-block">
+        <h1>Universal Medical Card</h1>
+      </div>
+      <div class="login-box" style="height:80vh;">
+        <form class="login-form" action="{{url_for("admin_bp.diseaseadd")}}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <h3 class="login-head"><i class="fa fa-lg fa-fw fa-globe"></i>Diseases Entry</h3>
+          <div class="form-group">
+            <label class="control-label">Disease Name</label>
+            <input class="form-control" type="text" placeholder="Disease Name" name="disease" autofocus required>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Severity</label>
+            <select name="sever" class="form-control">
+              <option value="1">Light</option>
+              <option value="2">Mild</option>
+              <option value="3">Extreme</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Anatomical Category</label>
+              <select placeholder="Anatomical Category" class="form-control" name="anatomical">
+                {% for data in context["anatomicald"] %}
+                  <option value="{{ data["anatomical_cat_id"] }}">{{ data["anatomical_cat_name"] }}</option>
+                {% endfor %}
+              </select>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Global Category</label>
+              <select placeholder="Anatomical Category" name="global" class="form-control">
+                {% for data in context["globald"] %}
+                  <option value="{{ data["global_d_id"] }}">{{ data["global_d_name"] }}</option>
+                {% endfor %}
+              </select>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Symptoms Seen</label>
+            <div class="dropdown-sin-2">
+              <select multiple placeholder="Symptoms" name="symptoms">
+                {% for data in context["symptoms"] %}
+                <option value="{{ data["symptom_id"] }}">{{ data["symptom_name"] }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group btn-container">
+            <button name="btn" class="btn btn-primary btn-block"><i class="fa fa-sign-in fa-lg fa-database"></i>Enter</button>
+          </div>
+        </form>
+      </div>
+    </section>
+    <!-- Essential javascripts for application to work-->
+    <script src={{ url_for('static',filename="js/jquery-3.2.1.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/popper.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/bootstrap.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/main.js") }}></script>    
+    <!-- The javascript plugin to display page loading on top-->
+    <script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>    
+    <script src={{ url_for('static',filename="js/plugins/jquery.dataTables.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/plugins/dataTables.bootstrap.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/plugins/sweetalert.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/jquery.dropdown.js") }}></script>
+    {% if request.args.get('inserted') ==  "true" %}        
+                <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+                <script>swal ("", "Disease Inserted" ,  "success" )</script>  
+        {% endif %}
+    <script>
+      $('.dropdown-sin-2').dropdown({
+        input: '<input type="text" maxLength="20" placeholder="Search">'
+      });
+    </script> 
+{% endblock %}
