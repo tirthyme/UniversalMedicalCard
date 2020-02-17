@@ -1,3 +1,6 @@
 #userdata
 
 /static/userdata
+
+#session
+/flask_session/
