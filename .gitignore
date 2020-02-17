@@ -3,4 +3,4 @@
 /static/userdata
 
 #session
-/flask_session/*
+/flask_session/
