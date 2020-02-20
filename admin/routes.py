@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template,session, request, redirect, url_for, json, session
+from flask import Blueprint, render_template,session, request, redirect, url_for, json, session, send_from_directory
 from flask import current_app as app
 from Utilities import Database, Operations
 
@@ -203,4 +203,31 @@ def globcatadd():
             return "ERROR"
 
 
+@admin_bp.route('/admin/verifyuser',methods=['GET','POST'])
+def verifyuser():
+    if request.method == 'GET':
+        email = request.args.get("email")
+        q = "SELECT user_master.id, user_master.pfp_url, user_master.uname,user_master.email,user_master.uphone,user_master.aadhar,user_master.aadhar_url,user_master.date_joined, user_master.gender, user_master.addr, pin_code_master.pin_code, city_master.city_name, state_master.state_name FROM user_master inner JOIN pin_code_master inner JOIN city_master inner JOIN state_master where email = %s and user_master.pin_code_id = pin_code_master.pin_code_id and pin_code_master.state_id = state_master.state_id and pin_code_master.city_id = city_master.city_id"
+        db = get_connection()
+        cur = db.cursor()
+        cur.execute(q, email)
+        if cur.rowcount == 0:
+            return "Invalid Input"
+        data = cur.fetchone() 
+        return render_template("verify_user.html", context = data)
+    elif request.method == 'POST':
+        query = request.form.get('issue')
+        return query
 
+AADHAR_UPLOAD_FOLDER = "static/userdata/aadhar"
+@admin_bp.route('/admin/uploads/<filename>')
+def uploaded_file_aadhar(filename):
+        return send_from_directory(AADHAR_UPLOAD_FOLDER, filename)
+
+IMAGE_UPLOAD_FOLDER = "static/userdata/images"
+@admin_bp.route('/admin/uploads/<filename>')
+def uploaded_file_pfp(filename):
+        return send_from_directory(IMAGE_UPLOAD_FOLDER, filename)
+
+# @admin_bp.route('')
+# def 

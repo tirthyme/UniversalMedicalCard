@@ -32,7 +32,12 @@ class Operations():
                 return False
             return True
 
-    def allowed_file(self, filename):
+    def allowed_aadhar_file(self, filename):
         ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
+        return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+    def allowed_pfp_file(self, filename):
+        ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
         return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

@@ -1,0 +1,80 @@
+
+{% extends "admin_panel_navigation_template.html" %}
+
+{% block pagetype %} <i class="fa fa-laptop"></i> Disease Entry {% endblock%}
+
+{% block maincontent %}
+<section class="material-half-bg">
+  <div class="cover"></div>
+</section>
+<br><br><br><br>
+<section class="login-content">
+  <div class="login-box" style="padding:30px;" >
+      <h3 class="login-head"><i class="fa fa-lg fa-fw fa-cog"></i>User Verification</h3>
+      <div class="form-group">
+        <table class="table">
+          <tr>
+          <td colspan =2 >
+            <center><img src="/admin/uploads/{{context["pfp_url"]}}" style="object-fit: contain;width: 100%;height: 100px; border-radius: 50%;" ></center>
+          </td>
+          </tr> 
+          <tr>
+          <td>
+        <label>Name: </label></td>
+        <td>
+        <label>{{ context["uname"] }}</label></td></tr>
+        <tr>
+          <td>
+        <label>Phone: </label></td>
+        <td>
+        <label>{{ context["uphone"] }}</label></td></tr>
+        <tr>
+          <td>
+        <label>Email: </label></td>
+        <td>
+        <label>{{ context["email"] }}</label></td></tr>
+        <tr>
+          <td>
+        <label>Gender: </label></td>
+        <td>
+        <label>{{ context["gender"] }}</label></td></tr>
+        <tr>
+          <td>
+            <label>Address</label>
+        </td>
+        <td style="text-overflow: ellipsis;">
+              <label>{{context["addr"]}}</label><br>
+              <label>{{context["city_name"]}}, {{context["state_name"]}} - {{context["pin_code"]}} </label>
+        <tr>
+          <td>
+        <label>BirthDate: </label></td>
+        <td>
+        <label>{{context["date_joined"]}}</label></td></tr>
+        <tr>
+          <td>
+        <label>ID Proof: </label></td>
+        <td>
+        <label><a href="/admin/uploads/{{context["aadhar_url"]}}"  target="_blank">Click Here</a></label></td></tr>
+        </table>
+      </div>
+      <form action="{{ url_for('admin_bp.verifyuser') }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="form-group btn-container">
+          <textarea rows="3" class="form-control" style="resize: none; margin-bottom: 10px;" placeholder="Write issues here if any...&#10; Note: If no issues then leave this box empty or else user won't be verified" name="issue" ></textarea>
+          <button class="btn btn-primary btn-block" name="btn"><i class="fa fa-sign-in fa-lg fa-database"></i>Verify</button>
+        </div>
+      </form>
+      <br><br><br>
+    </div>
+    <br><br><br><br><br>
+  </section>
+    <!-- Essential javascripts for application to work-->
+    <script src={{ url_for('static',filename="js/jquery-3.2.1.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/popper.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/bootstrap.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/main.js") }}></script>    
+    <!-- The javascript plugin to display page loading on top-->
+    <script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>    
+    <script src={{ url_for('static',filename="js/plugins/jquery.dataTables.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/plugins/dataTables.bootstrap.min.js") }}></script>
+{% endblock %}

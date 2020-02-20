@@ -37,7 +37,8 @@
                <td>{% if item["isactive"] == 0%}Not Active
                {% else %} Active{% endif %}</td>   
                <td>{{item["date_joined"]}}</td>   
-               <td>{% if item["isverified"] == 0%}<a href="">Verify Now</a>
+               <td>{% if item["isverified"] == 0%}
+                <a href="verifyuser?email={{item['email']}}">Verify Now</a>
                {% else %}Verified{% endif %}</td>   
            </tr>
         {% endfor %}
