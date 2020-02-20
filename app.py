@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, session, redirect, url_for, session, flash, send_from_directory
+from flask import Flask, render_template, request, session, redirect, url_for, session, flash, send_from_directory, Blueprint
 from flask_session import Session
 from werkzeug.utils import secure_filename
 from Utilities import Database
 from flask_wtf.csrf import CSRFProtect
 from admin import routes as admin_routes
+from doctor import routes as doctor_routes
 from admin.routes import get_connection
 from pymysql import escape_string, MySQLError
 from Utilities import Operations
@@ -23,6 +24,7 @@ app.config['MAX_CONTENT_LENGTH'] = 1024*400
 Session(app)
 op = Operations.Operations()
 app.register_blueprint(admin_routes.admin_bp)
+app.register_blueprint(doctor_routes.doctor_bp)
 
 @app.route('/')
 def hello(): 
