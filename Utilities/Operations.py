@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, session
 from flask import current_app as app
 from Utilities import Database
 from pymysql import escape_string
@@ -41,3 +41,9 @@ class Operations():
         ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
         return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    
+    def is_loggedin(self):
+        if session["logged"] != None:
+            return (True,session["role"])
+        else:
+            return (False,)

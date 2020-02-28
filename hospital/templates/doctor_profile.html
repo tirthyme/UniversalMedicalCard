@@ -1,0 +1,68 @@
+{% extends "hospital_navigation_template.html" %}
+
+{% block pagetype %} <i class="fa fa-laptop"></i> Doctor Profile {% endblock%}
+
+{% block maincontent %}
+
+<div class="tile">
+<center><h3>Doctor Profile</h3></center>
+<div class="tile-body">
+        <table class="table">
+          <tr>
+          <td colspan =2 >
+            <center><img src="/static/userdata/images/{{context["doctor_data"]["pfp_url"]}}" style="object-fit: contain;width: 100%;height: 100px; border-radius: 50%;" ></center>
+          </td>
+          </tr> 
+          <tr>
+          <td>
+        <label>Name: </label></td>
+        <td>
+        <label>{{ context["doctor_data"]["uname"] }}</label></td></tr>
+        <tr>
+          <td>
+        <label>Phone: </label></td>
+        <td>
+        <label>{{ context["doctor_data"]["uphone"] }}</label></td></tr>
+        <tr>
+          <td>
+        <label>Email: </label></td>
+        <td>
+        <label>{{ context["doctor_data"]["email"] }}</label></td></tr>
+        <tr>
+          <td>
+        <label>Gender: </label></td>
+        <td>
+        <label>{{ context["doctor_data"]["gender"] }}</label></td></tr>
+        <tr>
+          <td>
+            <label>Address</label>
+        </td>
+        <td style="text-overflow: ellipsis;">
+              <label>{{context["doctor_data"]["addr"]}}</label><br>
+              <label>{{context["doctor_data"]["city_name"]}}, {{context["doctor_data"]["state_name"]}} - {{context["doctor_data"]["pin_code"]}} </label>
+        <tr>
+          <td>
+        <label>BirthDate: </label></td>
+        <td>
+        <label>{{context["doctor_data"]["date_joined"]}}</label></td></tr>
+        <tr>
+          <td>
+        <label>ID Proof: </label></td>
+        <td>
+        <label><a href="/admin/uploads/{{context["doctor_data"]["aadhar_url"]}}"  target="_blank">Click Here</a></label></td></tr>
+        <tr>
+          <td colspan =2 >
+            Medical Profession/s:<br>{% for data in context["doctor_profession"]%} {{data["docprof"]}} ; {% endfor %}
+          </td>
+          </tr> 
+        </table>
+        <form action="{{ url_for('hospital_bp.add_doctor') }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="hidden" name="doc_id" value="{{context["doctor_data"]["doctor_id"]}}"/>
+            <div class="form-group btn-container">
+            <button name="btn" class="btn btn-primary btn-block" value="doc_request"><i class="fa fa-sign-in fa-lg fa-database"></i>Request Doctor to Join</button>
+          </div>
+        </form>
+</div>
+</div>
+{% endblock %}

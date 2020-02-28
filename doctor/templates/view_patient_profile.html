@@ -1,0 +1,88 @@
+
+{% extends "doctor_navigation_template.html" %}
+
+{% block pagetype %} <i class="fa fa-laptop"></i> User Profile {% endblock %}
+
+{% block maincontent %}
+<section class="material-half-bg">
+  <div class="cover"></div>
+</section>
+<br><br><br><br>
+<section class="login-content">
+  <div class="login-box" style="padding:30px;" >
+      <h3 class="login-head"><i class="fa fa-lg fa-fw fa-cog"></i>User Profile</h3>
+      <div class="form-group">
+        <table class="table">
+          <tr>
+          <td colspan =2 >
+            <center><img src="../static/userdata/images/{{context["profile"]["pfp_url"]}}" style="object-fit: contain;width: 100%;height: 100px; border-radius: 50%;" ></center>
+          </td>
+          </tr> 
+          <tr>
+          <td>
+        <label>Name: </label></td>
+        <td>
+        <label>{{ context["profile"]["uname"] }}</label></td></tr>
+        <tr>
+          <td>
+        <label>Phone: </label></td>
+        <td>
+        <label>{{ context["profile"]["uphone"] }}</label></td></tr>
+        <tr>
+          <td>
+        <label>Email: </label></td>
+        <td>
+        <label>{{ context["profile"]["email"] }}</label></td></tr>
+        <tr>
+          <td>
+        <label>Gender: </label></td>
+        <td>
+        <label>{{ context["profile"]["gender"] }}</label></td></tr>
+        <tr>
+          <td>
+            <label>Address</label>
+        </td>
+        <td style="text-overflow: ellipsis;">
+              <label>{{context["profile"]["addr"]}}</label><br>
+              <label>{{context["profile"]["city_name"]}}, {{context["profile"]["state_name"]}} - {{context["profile"]["pin_code"]}} </label></td>
+        <tr>
+          <td>
+        <label>BirthDate: </label></td>
+        <td>
+        <label>{{context["profile"]["date_joined"]}}</label></td></tr>
+        <tr>
+          <td>
+        <label>ID Proof: </label></td>
+        <td>
+        <label>Aadhar: {{ context["profile"]["aadhar"] }}</label>
+        <label><a href="/admin/uploads/{{context["profile"]["aadhar_url"]}}"  target="_blank">Click Here</a></label></td></tr>
+        <tr>
+          <td>
+            Past Medical Records:
+          </td>
+          <td>
+          {% for data in context["past_med_records"] %}
+              <a href="/doctor/viewmedicalrecord?id={{data["record_id"]}}"> {{data["create_date"]}} </a>
+            {% endfor %}
+          </td>
+        </tr>
+        </table>
+        <form action="{{url_for("doctor_bp.addmedicalrecord")}}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <input type="hidden" name="patient_id" value="{{context["profile"]["aadhar"]}}">
+        <input type="hidden" name="patient_name" value="{{context["profile"]["uname"]}}">
+        <input type="hidden" name="action" value="addmedicalrecord">
+        <button class="btn btn-primary btn-block"><i class="fa fa-sign-in fa-lg fa-database"></i>Add a New Medical Record</a>
+        </form>
+
+
+      <!-- Essential javascripts for application to work-->
+      <script src={{ url_for('static',filename="js/jquery-3.2.1.min.js") }}></script>
+      <script src={{ url_for('static',filename="js/popper.min.js") }}></script>
+      <script src={{ url_for('static',filename="js/bootstrap.min.js") }}></script>
+      <script src={{ url_for('static',filename="js/main.js") }}></script>    
+      <!-- The javascript plugin to display page loading on top-->
+      <script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>
+      <script src={{ url_for('static',filename="js/plugins/select2.min.js") }}></script>
+{% endblock %} 
+

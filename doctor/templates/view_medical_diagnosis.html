@@ -1,0 +1,67 @@
+
+{% extends "doctor_navigation_template.html" %}
+
+{% block pagetype %} <i class="fa fa-laptop"></i> View Medical Record  {% endblock %}
+
+{% block maincontent %}
+      <div class="row">
+        <div class="col-md-12">
+          <div class="tile">
+            <section class="invoice">
+              <div class="row mb-4">
+                <div class="col-6">
+                  <h2 class="page-header">Medical Diagnosis</h2><br>
+                </div>
+                <div class="col-6">
+                  <h5 class="text-right">Report Date: {{context["diagnosis"]["diag_date"]}}</h5>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 table-responsive">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Symptoms Seen: </th>
+                        <th>{{context["symptoms"]}}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th>Diseases Seen:</th>
+                        <th>{{context["diseases"] }}</th>
+                      </tr>
+                       <tr>
+                        <th>Diagnosis:</th>
+                         <th>{{context["diagnosis"]["diagnosis"]}}</th>
+                      </tr>
+                      <tr>
+                        <th>Medical Tests Suggested: </th>
+                        <th>{% for data in context["medical_tests"] %}
+                        {{data["med_test_name"]}}<br>
+                        {% endfor %}
+                        </th>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="row d-print-none mt-2">
+                <div class="col-12 text-right"><a class="btn btn-primary" href="javascript:window.print();"><i class="fa fa-print"></i>Print Report</a></div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <!-- Essential javascripts for application to work-->
+      <script src={{ url_for('static',filename="js/jquery-3.2.1.min.js") }}></script>
+      <script src={{ url_for('static',filename="js/popper.min.js") }}></script>
+      <script src={{ url_for('static',filename="js/bootstrap.min.js") }}></script>
+      <script src={{ url_for('static',filename="js/main.js") }}></script>    
+      <!-- The javascript plugin to display page loading on top-->
+      <script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>
+      <script src={{ url_for('static',filename="js/plugins/select2.min.js") }}></script>
+       <script>
+       $('#medtests').select2();
+       </script>
+{% endblock %}

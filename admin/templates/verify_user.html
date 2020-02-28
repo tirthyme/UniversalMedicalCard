@@ -1,7 +1,7 @@
 
 {% extends "admin_panel_navigation_template.html" %}
 
-{% block pagetype %} <i class="fa fa-laptop"></i> Disease Entry {% endblock%}
+{% block pagetype %} <i class="fa fa-laptop"></i> Verify User {% endblock%}
 
 {% block maincontent %}
 <section class="material-half-bg">
@@ -15,7 +15,7 @@
         <table class="table">
           <tr>
           <td colspan =2 >
-            <center><img src="/admin/uploads/{{context["pfp_url"]}}" style="object-fit: contain;width: 100%;height: 100px; border-radius: 50%;" ></center>
+            <center><img src="../static/userdata/images/{{context["pfp_url"]}}" style="object-fit: contain;width: 100%;height: 100px; border-radius: 50%;" ></center>
           </td>
           </tr> 
           <tr>
@@ -54,16 +54,29 @@
           <td>
         <label>ID Proof: </label></td>
         <td>
+        <label>Aadhar: {{ context["aadhar"] }}</label>
         <label><a href="/admin/uploads/{{context["aadhar_url"]}}"  target="_blank">Click Here</a></label></td></tr>
+        <tr style="border:2px;">
+          <td>
+        <label>Query</label></td>
+        <td>
+        <label>Solved</td>
+        <td>
+        <label>Solved</td></tr>
         </table>
       </div>
+      {% if context["isverified"] == 0 %}
       <form action="{{ url_for('admin_bp.verifyuser') }}" method="post">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <input type="hidden" name="aadhar" value="{{ context["aadhar"] }}"/>
         <div class="form-group btn-container">
           <textarea rows="3" class="form-control" style="resize: none; margin-bottom: 10px;" placeholder="Write issues here if any...&#10; Note: If no issues then leave this box empty or else user won't be verified" name="issue" ></textarea>
-          <button class="btn btn-primary btn-block" name="btn"><i class="fa fa-sign-in fa-lg fa-database"></i>Verify</button>
+          <button class="btn btn-primary btn-block" name="btn" value={{context["id"]}}><i class="fa fa-sign-in fa-lg fa-database"></i>Verify</button>
         </div>
       </form>
+      {% else %}
+      <p class="btn btn-primary btn-block"><i class="fa fa-sign-in fa-lg fa-database"></i>Already verified</p>
+      {% endif %}
       <br><br><br>
     </div>
     <br><br><br><br><br>

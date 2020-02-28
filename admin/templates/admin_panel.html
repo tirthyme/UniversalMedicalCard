@@ -4,15 +4,86 @@
 
 {% block maincontent %}
 
+<div class="form-group">
+	<div class="row">
+		<form action="/admin" method="post">
+			<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+			<select class="form-control" name="city">
+				<optgroup label="City">
+					<option value="Ahmedabad">Ahmedabad</option>
+					<option value="Vadodara">Vadodara</option>
+					<option value="Anand">Anand</option>
+				</optgroup>
+			</select>
+
+			<select class="form-control" name="age">
+				<optgroup label="Age Group">
+					<option value="10">10</option>
+					<option value="20">20</option>
+					<option value="30">30</option>
+					<option value="40">40</option>
+					<option value="50">50</option>
+				</optgroup>
+			</select>
+
+			<select class="form-control" name="gender">
+				<optgroup label="Gender">
+					<option value="Male">Male</option>
+					<option value="Female">Female</option>
+				</optgroup>
+			</select>
+			<button class="btn btn-primary">Submit</button>
+	</form>
+	</div>	
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="tile">
+			<h3 class="tile-title">Disease Outbreak</h3>
+			<div class="embed-responsive embed-responsive-16by9">
+				<canvas class="embed-responsive-item" id="lineChartDemo" height="1200" width="1200"></canvas>
+			</div>
+		</div>
+	</div>
+</div>
 
 <!-- Essential javascripts for application to work-->
-    <script src={{ url_for('static',filename="js/jquery-3.2.1.min.js") }}></script>
-    <script src={{ url_for('static',filename="js/popper.min.js") }}></script>
-    <script src={{ url_for('static',filename="js/bootstrap.min.js") }}></script>
-    <script src={{ url_for('static',filename="js/main.js") }}></script>    
-    <!-- The javascript plugin to display page loading on top-->
-    <script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>    
-    <script src={{ url_for('static',filename="js/plugins/jquery.dataTables.min.js") }}></script>
-    <script src={{ url_for('static',filename="js/plugins/dataTables.bootstrap.min.js") }}></script>
+<script src={{ url_for('static',filename="js/jquery-3.2.1.min.js") }}></script>
+<script src={{ url_for('static',filename="js/popper.min.js") }}></script>
+<script src={{ url_for('static',filename="js/bootstrap.min.js") }}></script>
+<script src={{ url_for('static',filename="js/plugins/chart.js") }}></script>    
+<script src={{ url_for('static',filename="js/main.js") }}></script>    
+<!-- The javascript plugin to display page loading on top-->
+<script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>    
+<script src={{ url_for('static',filename="js/plugins/jquery.dataTables.min.js") }}></script>
+<script src={{ url_for('static',filename="js/plugins/dataTables.bootstrap.min.js") }}></script>
+<script type="text/javascript">
+	var data = {
+		labels: [
+		{% for data in context["diseaseList"] %}
+			"{{data}}",
+		{% endfor %}
+		],
+		datasets: [
+		{
+			label: "My First dataset",
+			fillColor: "rgba(220,220,220,0.2)",
+			strokeColor: "rgba(220,220,220,1)",
+			pointColor: "rgba(220,220,220,1)",
+			pointStrokeColor: "#fff",
+			pointHighlightFill: "#fff",
+			pointHighlightStroke: "rgba(220,220,220,1)",
+			data: [
+			{% for data in context["diseaseCount"] %}
+			{{data}},
+			{% endfor %}
+			]
+		},
+		]
+	};
+	var ctxl = $("#lineChartDemo").get(0).getContext("2d");
+      var lineChart = new Chart(ctxl).Line(data);
+</script>
 {% endblock %}
 

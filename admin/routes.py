@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template,session, request, redirect, url_for, json, session, send_from_directory
 from flask import current_app as app
 from Utilities import Database, Operations
+from prevailDisease import prevalilingDiseases
 
 
 admin_bp = Blueprint('admin_bp',__name__,template_folder="templates",static_folder="static")
@@ -19,8 +20,15 @@ def set_user_data():
     return context
 
 
-@admin_bp.route('/admin',methods=['GET'])
+@admin_bp.route('/admin',methods=['GET',"POST"])
 def admin():
+    if request.method == "POST":
+        context = {}
+        city = request.form.get("city")
+        age = request.form.get("age")
+        gen = request.form.get("gender")
+        context.update(prevalilingDiseases(city,int(age),gen))
+        return render_template("admin_panel.html",context = context)
     db = get_connection()
     print(session["email"])
     q = "select * from user_master where email = %s"
@@ -31,6 +39,7 @@ def admin():
     cur = cur.fetchone()
     context = {}
     context.update(set_user_data())
+    context.update(prevalilingDiseases("All","All","All"))
     return render_template("admin_panel.html",context = context)
 
 
@@ -207,7 +216,9 @@ def globcatadd():
 def verifyuser():
     if request.method == 'GET':
         email = request.args.get("email")
-        q = "SELECT user_master.id, user_master.pfp_url, user_master.uname,user_master.email,user_master.uphone,user_master.aadhar,user_master.aadhar_url,user_master.date_joined, user_master.gender, user_master.addr, pin_code_master.pin_code, city_master.city_name, state_master.state_name FROM user_master inner JOIN pin_code_master inner JOIN city_master inner JOIN state_master where email = %s and user_master.pin_code_id = pin_code_master.pin_code_id and pin_code_master.state_id = state_master.state_id and pin_code_master.city_id = city_master.city_id"
+        if(email == ""):
+            return "NOT VALID"
+        q = "SELECT user_master.id, user_master.pfp_url, user_master.uname,user_master.email,user_master.uphone,user_master.aadhar,user_master.aadhar_url,user_master.date_joined, user_master.gender, user_master.isverified, user_master.addr, pin_code_master.pin_code, city_master.city_name, state_master.state_name FROM user_master inner JOIN pin_code_master inner JOIN city_master inner JOIN state_master where email = %s and user_master.pin_code_id = pin_code_master.pin_code_id and pin_code_master.state_id = state_master.state_id and pin_code_master.city_id = city_master.city_id"
         db = get_connection()
         cur = db.cursor()
         cur.execute(q, email)
@@ -217,7 +228,42 @@ def verifyuser():
         return render_template("verify_user.html", context = data)
     elif request.method == 'POST':
         query = request.form.get('issue')
-        return query
+        uid = request.form.get("btn")
+        aadhar = request.form.get("aadhar")
+        if query != "":
+            q = "insert into verification_query_master(query, user_id, solved) values (%s,%s,%s)"
+            db = get_connection()
+            cur= db.cursor()
+            try:
+                cur.execute(q, (query, uid, 0))
+                db.commit()
+                cur.close()
+                db.close()
+                return "query done"
+            except Database.pymysql.MySQLError as error:
+                print(error)
+                db.rollback()
+                cur.close()
+                db.close()
+                return "ERROR"
+        else:
+            q = "update user_master set isverified = 1 where id = %s"
+            q1 = "insert into medical_card_mapper(medical_card_no,user_id) values(%s,%s)"
+            db = get_connection()
+            cur= db.cursor()
+            try:
+                cur.execute(q, uid)
+                cur.execute(q1,(aadhar,uid))
+                db.commit()
+                cur.close()
+                db.close()
+                return "verified"
+            except Database.pymysql.MySQLError as error:
+                print(error)
+                db.rollback()
+                cur.close()
+                db.close()
+                return "ERROR"
 
 AADHAR_UPLOAD_FOLDER = "static/userdata/aadhar"
 @admin_bp.route('/admin/uploads/<filename>')
@@ -229,5 +275,96 @@ IMAGE_UPLOAD_FOLDER = "static/userdata/images"
 def uploaded_file_pfp(filename):
         return send_from_directory(IMAGE_UPLOAD_FOLDER, filename)
 
-# @admin_bp.route('')
-# def 
+@admin_bp.route('/admin/addmedicalbranch',methods=['GET','POST'])
+def medicalbranchadd():
+    if request.method == 'GET':
+        return render_template('add_medical_branch.html')
+    else:
+        db = get_connection()
+        cur = db.cursor()
+        edlevelcat = request.form.get("anatcat")
+        q = "insert into medical_ed_level_category(med_ed_cat_name) values (%s)"
+        edlevelcat = op.filter_data(edlevelcat, "string")
+        try:
+            cur.execute(q,(edlevelcat))
+            db.commit()
+            cur.close()
+            db.close()
+            return redirect(url_for("admin_bp.addmedicalbranch",inserted="true"))
+        except Database.pymysql.MySQLError as error:
+            print(error)
+            db.rollback()
+            cur.close()
+            db.close()
+            return "ERROR"
+
+
+@admin_bp.route('/admin/addmedicalspecialization',methods=['GET','POST'])
+def addmedicalspecialization():
+    if request.method == 'GET':
+        return render_template('add_medical_specialization.html')
+    else:
+        db = get_connection()
+        cur = db.cursor()
+        edspec = request.form.get("anatcat")
+        q = "insert into medical_specialization_master(med_spec_name) values (%s)"
+        edspec = op.filter_data(edspec, "string")
+        try:
+            cur.execute(q,(edspec))
+            db.commit()
+            cur.close()
+            db.close()
+            return redirect(url_for("admin_bp.addmedicalspecialization",inserted="true"))
+        except Database.pymysql.MySQLError as error:
+            print(error)
+            db.rollback()
+            cur.close()
+            db.close()
+            return "ERROR"
+
+
+@admin_bp.route('/admin/addeducationlevel',methods=['GET','POST'])
+def addeducationlevel():
+    if request.method == 'GET':
+        return render_template('add_education_level.html')
+    else:
+        db = get_connection()
+        cur = db.cursor()
+        edspec = request.form.get("anatcat")
+        q = "insert into medical_ed_level_category(med_ed_cat_name) values (%s)"
+        edspec = op.filter_data(edspec, "string")
+        try:
+            cur.execute(q,(edspec))
+            db.commit()
+            cur.close()
+            db.close()
+            return redirect(url_for("admin_bp.addeducationlevel",inserted="true"))
+        except Database.pymysql.MySQLError as error:
+            print(error)
+            db.rollback()
+            cur.close()
+            db.close()
+            return "ERROR"
+
+@admin_bp.route('/admin/addmedicaltests', methods=["GET","POST"])
+def addmedicaltests():
+    if request.method == 'GET':
+        return render_template('add_medical_tests.html')
+    else:
+        db = get_connection()
+        cur = db.cursor()
+        edspec = request.form.get("anatcat")
+        q = "insert into medical_tests_master(med_test_name) values (%s)"
+        edspec = op.filter_data(edspec, "string")
+        try:
+            cur.execute(q,(edspec))
+            db.commit()
+            cur.close()
+            db.close()
+            return redirect(url_for("admin_bp.addmedicaltests",inserted="true"))
+        except Database.pymysql.MySQLError as error:
+            print(error)
+            db.rollback()
+            cur.close()
+            db.close()
+            return "ERROR"

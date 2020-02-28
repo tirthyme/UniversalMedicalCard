@@ -1,0 +1,11 @@
+   <div class="tile d-print-none">
+            <div class="tile-body">
+              <h4>Past Medical Diagnosis</h4><br>
+              <b>
+              {% for data in context["medical_diagnostic_records"]%}
+                <a class="navbar-link" href="/doctor/viewdiagnosis?diag_id={{data["diag_id"]}}">{{data["diag_date"]}}</a><br>
+              {% endfor %}
+              </b>
+            </div>
+          </div>
+        </div>

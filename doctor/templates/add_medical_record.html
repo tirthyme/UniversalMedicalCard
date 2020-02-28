@@ -1,0 +1,120 @@
+
+{% extends "doctor_navigation_template.html" %}
+
+{% block pagetype %} <i class="fa fa-laptop"></i> Add Medical Record {% endblock %}
+
+{% block maincontent %}
+
+<div class="container">
+  <br>
+  <br>
+  <style type="text/css">
+    label{
+      font-size: 15px;
+    }
+  </style>
+  <div class="row">
+    <div class="col-lg-12 col-md-12">
+      <div class="heading-title text-center">
+        <h2 class="title iq-tw-6 iq-font-white">Medical Record</h2>
+        <p class="label"><b>For Patient: {{ context["patient_name"] }}</b></p>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-md-center">
+    <div class="col-md-8">
+      <div class="iq-login iq-pt-40 iq-pb-30 iq-plr-30">
+        <form action="/doctor/addmedicalrecord" method="POST" enctype="multipart/form-data"> 
+          <input type="hidden" name="patient_id" value="{{ context["patient_id"] }}"/>
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <input type="hidden" name="action" value="medicalrecordinsert"/>
+          <div class="form-group">
+            <label class="iq-font-white">Hospital Associated</label>
+            {% if context["hospital_no"] == 1%}
+            <input type="hidden" name="hospital_id" value="{{ context["hospitals"][0]["hospital_id"] }}"/>
+              <p><b>{{context["hospitals"][0]["uname"]}}</b></p>
+            {% else %}
+            <select name="hospital_id" class="form-control">
+            {% for data in context["hospitals"] %}
+            <option value="{{ data["hospital_id"] }}">{{ data["uname"] }}</option>
+            {% endfor %}
+            </select>
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label class="iq-font-white">Symptoms Seen</label>
+            <select class="form-control" style="width: 100%;" name="symptom" id="symptom" multiple>
+              <optgroup label="Select Symptoms">
+               {% for data in context["symptoms"] %}
+            <option value="{{ data["symptom_id"] }}">{{ data["symptom_name"] }}</option>
+            {% endfor %}
+              </optgroup>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="iq-font-white">Disease(s) Seen</label>
+            <select class="form-control" style="width: 100%;" name="disease" id="disease" multiple>
+              <optgroup label="Select Symptoms">
+              {% for data in context["diseases"] %}
+            <option value="{{ data["disease_id"] }}">{{ data["disease_name"] }}</option>
+            {% endfor %}
+              </optgroup>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="iq-font-white">Primary Diagnosis</label>
+            <textarea class="form-control" name="diagnosis" placeholder="Diagnosis Required" required maxlength="100"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Medical File & Tests</label>
+            <input type="file"  class="form-control" name="medicalfile" required/>
+          </div>
+          <div class="form-group iq-mt-20">
+            <div class="row iq-mt-30">
+              <div class="col-sm-3">
+                <label class="iq-font-white" >Area</label>
+                <select class="form-control" style="width: 100%;" name="state">
+                  <option value="1">Gujarat</option>
+                  <option value="2">Maharashtra</option>
+                </select>
+              </div>
+              <div class="col-sm-3">
+                <label class="iq-font-white" >City</label>
+                <select class="form-control" style="width: 100%;" name="city">
+                  <option value="1">Ahmedabad</option>
+                  <option value="2">Mumbai</option>
+                </select>
+              </div>
+              <div class="col-sm-3">
+                <label class="iq-font-white" >Area</label>
+                <select class="form-control" style="width: 100%;" name="area">
+                  <option value="1">Paldi</option>
+                  <option value="2">Bandra</option>
+                </select>
+              </div>
+              <div class="col-sm-3">
+                <label class="iq-font-white" >Pincode</label>
+                <select class="form-control" style="width: 100%;" name="pincode">
+                  <option value="1">380007</option>
+                  <option value="2">322200</option>
+                </select>
+              </div>
+              <br><br>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary form-control" name="submit">Submit</button>
+          </form>
+      </div>
+      <!-- Essential javascripts for application to work-->
+      <script src={{ url_for('static',filename="js/jquery-3.2.1.min.js") }}></script>
+      <script src={{ url_for('static',filename="js/popper.min.js") }}></script>
+      <script src={{ url_for('static',filename="js/bootstrap.min.js") }}></script>
+      <script src={{ url_for('static',filename="js/main.js") }}></script>    
+      <!-- The javascript plugin to display page loading on top-->
+      <script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>
+      <script src={{ url_for('static',filename="js/plugins/select2.min.js") }}></script>
+      <script type="text/javascript">
+        $('#symptom').select2();
+        $('#disease').select2();
+      </script>
+      {% endblock %} 

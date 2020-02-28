@@ -1,0 +1,51 @@
+
+{% extends "hospital_navigation_template.html" %}
+
+{% block pagetype %} <i class="fa fa-laptop"></i> Hospital Dashboard {% endblock%}
+
+{% block maincontent %}
+
+<div class="tile">
+            <h3 class="tile-title">Search Doctor by their email or phone</h3>
+            <div class="tile-body">
+            <form action="{{ url_for('hospital_bp.add_doctor') }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+              <div class="form-group">
+                <input type="text" class="form-control" name="doc_id" placeholder="Data Required" maxlength="80">
+              </div>
+            </div>
+            <div class="tile-footer"><button class="btn btn-primary">Link</button></div>
+            </form>
+</div>
+{% if context is defined %}
+{% if context["doctor_data"] != "None"%}
+      <div class="tile">
+      <div class="timeline-post">
+                  <div class="content">
+                  {{ context["profile"]["doctor_id"] }}
+                    <h5><img style="margin-right:3vh;" height="50" width="50" src="../static/userdata/images/{{ context["profile"]["pfp_url"] }}"><a href="doctor_profile/{{context["profile"]["doctor_id"]}}">{{ context["profile"]["uname"] }}</a></h5>
+                    <p class="text"><b>Email: {{ context["profile"]["email"] }}<br>
+                    Aadhar: {{ context["profile"]["aadhar"] }}<br>
+                    Medical Profession/s:<br>{% for data in context["doctor_profession"]%} {{data["docprof"]}}<br> {% endfor %}
+                    </b> </p>
+                </div>
+              </div> 
+            </div>
+{% else %}
+<div class="tile">
+<h6> No data found </h6>
+</div>
+{% endif %}
+{% endif %}
+
+<!-- Essential javascripts for application to work-->
+    <script src={{ url_for('static',filename="js/jquery-3.2.1.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/popper.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/bootstrap.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/main.js") }}></script>    
+    <!-- The javascript plugin to display page loading on top-->
+    <script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>    
+    <script src={{ url_for('static',filename="js/plugins/jquery.dataTables.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/plugins/dataTables.bootstrap.min.js") }}></script>
+{% endblock %}
+

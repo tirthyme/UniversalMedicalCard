@@ -1,0 +1,19 @@
+
+{% extends "hospital_navigation_template.html" %}
+
+{% block pagetype %} <i class="fa fa-laptop"></i> Hospital Dashboard {% endblock%}
+
+{% block maincontent %}
+
+
+<!-- Essential javascripts for application to work-->
+    <script src={{ url_for('static',filename="js/jquery-3.2.1.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/popper.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/bootstrap.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/main.js") }}></script>    
+    <!-- The javascript plugin to display page loading on top-->
+    <script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>    
+    <script src={{ url_for('static',filename="js/plugins/jquery.dataTables.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/plugins/dataTables.bootstrap.min.js") }}></script>
+{% endblock %}
+

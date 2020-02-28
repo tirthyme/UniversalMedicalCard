@@ -1,0 +1,45 @@
+
+{% extends "hospital_navigation_template.html" %}
+
+{% block pagetype %} <i class="fa fa-laptop"></i> Hospital Dashboard {% endblock%}
+
+{% block maincontent %}
+
+{% if context["doctor_data"] != "None"%}
+
+{% for data in context["doctor_data"] %}
+
+<div class="tile">
+  <div class="timeline-post">
+        <div class="content">
+            <h5><img style="margin-right:3vh;" height="50" width="50" src="../static/userdata/images/{{ data["pfp_url"] }}"><a href="doctor_profile/{{data["doctor_id"]}}">{{ data["uname"] }}</a></h5>
+            <p class="text"><b>Email: {{ data["email"] }}<br>
+                Aadhar: {{ data["aadhar"] }}<br>
+                {% if data["accepted"] == -1 %}
+                <p class="btn btn-primary">Pending</p>
+                {% elif data["accepted"] == 0 %}
+                <p class="btn btn-primary">Denied</p>
+                {% else %}
+                <p class="btn btn-primary">Accepted</p>
+                {% endif %}
+            </b> 
+            </p>
+        </div>
+    </div> 
+</div>
+
+{% endfor %}
+
+{% endif %}
+
+
+<!-- Essential javascripts for application to work-->
+<script src={{ url_for('static',filename="js/jquery-3.2.1.min.js") }}></script>
+<script src={{ url_for('static',filename="js/popper.min.js") }}></script>
+<script src={{ url_for('static',filename="js/bootstrap.min.js") }}></script>
+<script src={{ url_for('static',filename="js/main.js") }}></script>    
+<!-- The javascript plugin to display page loading on top-->
+<script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>    
+<script src={{ url_for('static',filename="js/plugins/jquery.dataTables.min.js") }}></script>
+<script src={{ url_for('static',filename="js/plugins/dataTables.bootstrap.min.js") }}></script>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "doctor_navigation_template.html" %}
+
+{% block pagetype %} <i class="fa fa-laptop"></i> Add Medical Expertise {% endblock%}
+
+{% block maincontent %}
+
+    <section class="login-content" style="min-height:None;">
+       <section class="login-content">
+      <div class="center-block">
+        <h1>Universal Medical Card</h1>
+      </div>
+      <div class="login-box" style="height:80vh;">
+        <form class="login-form" action="{{url_for("doctor_bp.addmedicalexpertise")}}" method="post" enctype="multipart/form-data">
+
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <h3 class="login-head"><i class="fa fa-lg fa-fw fa-globe"></i>Medical Expertise Entry</h3>
+          <div class="form-group">
+            <label class="control-label">Branch</label>
+            <select name="medbranch" class="form-control">
+              {% for data in context["education_specialization"] %}
+              <option value="{{data["med_ed_spec_id"]}}">{{data["med_ed_spec_name"]}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Level</label>
+              <select placeholder="Education Level" class="form-control" name="edlevel">
+              {% for data in context["education_level"] %}
+              <option value="{{data["med_ed_cat_id"]}}">{{data["med_ed_cat_name"]}}</option>
+              {% endfor %}
+              </select>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Education Specialization</label>
+              <select placeholder=" Type of Education " name="specialization" class="form-control">
+              {% for data in context["medical_specialization"] %}
+              <option value="{{data["med_spec_id"]}}">{{data["med_spec_name"]}}</option>
+              {% endfor %}
+              </select>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Certificates</label>
+              <input type="file" class="form-control" placeholder="Certificate" name="certi"/>
+          </div>
+          <div class="form-group btn-container">
+            <button name="btn" class="btn btn-primary btn-block"><i class="fa fa-sign-in fa-lg fa-database"></i>Enter</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+<!-- Essential javascripts for application to work-->
+    <script src={{ url_for('static',filename="js/jquery-3.2.1.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/popper.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/bootstrap.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/main.js") }}></script>    
+    <!-- The javascript plugin to display page loading on top-->
+    <script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>    
+    <script src={{ url_for('static',filename="js/plugins/jquery.dataTables.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/plugins/dataTables.bootstrap.min.js") }}></script>
+{% endblock %}

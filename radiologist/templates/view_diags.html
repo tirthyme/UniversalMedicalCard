@@ -1,0 +1,47 @@
+{% extends "radiologist_navigation_template.html" %}
+
+{% block pagetype %} <i class="fa fa-laptop"></i> User Profile {% endblock %}
+
+{% block maincontent %}
+
+      <div class="row" id="b">
+        <div class="col-md-12">
+          <div class="tile">
+            <h3 class="tile-title">Search patient by Medical Card ID or aadhar or phone</h3>
+            <form method="get" action="{{ url_for("radio_bp.medical_diagnosis") }}">
+            <div class="tile-body">
+              <input type="text" name="key" class="form-control" required>
+            </div>
+            <div class="tile-footer"><button class="btn btn-primary">Search</button></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% if context is defined %}
+    {% if context["diagnosis"] == "None"%}
+      <h3>User Not Found</h3>
+    {% else %}
+    <div class="tile"> 
+      <div class="timeline-post">
+                  <div class="content">
+                    <h5>
+                    {% for data in context["diagnosis"] %}
+                    <a href="medical_tests?id={{ data["diag_id"] }}">{{ data["create_date"]}}</a><br>
+                    {% endfor %}
+                    </h5>
+                </div>
+              </div> </div>
+    {% endif %}
+    {% endif %}
+       
+    <!-- Essential javascripts for application to work-->
+    <script src={{ url_for('static',filename="js/jquery-3.2.1.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/popper.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/bootstrap.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/main.js") }}></script>    
+    <!-- The javascript plugin to display page loading on top-->
+    <script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>    
+    <script src={{ url_for('static',filename="js/plugins/jquery.dataTables.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/plugins/dataTables.bootstrap.min.js") }}></script>
+
+{% endblock %}

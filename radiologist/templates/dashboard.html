@@ -1,0 +1,45 @@
+{% extends "radiologist_navigation_template.html" %}
+
+{% block pagetype %} <i class="fa fa-laptop"></i> Radiologist Dashboard {% endblock %}
+
+{% block maincontent %}
+
+      <div class="row" id="b">
+        <div class="col-md-12">
+          <div class="tile">
+            <h3 class="tile-title">Search patient by Medical Card ID or aadhar or phone</h3>
+            <form method="get" action="{{ url_for("radio_bp.medical_diagnosis") }}">
+            <div class="tile-body">
+              <input type="text" name="id" class="form-control" required>
+            </div>
+            <div class="tile-footer"><button class="btn btn-primary">Search</button></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% if context is defined %}
+    {% if context["profile"] == "None" %}
+      <h3>User Not Found</h3>
+    {% else %}
+    <div class="tile"> 
+      <div class="timeline-post">
+                  <div class="content">
+                    <h5><img style="margin-right:3vh;" height="50" width="50" src="../static/userdata/images/{{ context["profile"]["pfp_url"] }}">
+                    <a href="medical_diagnosis?id={{ context["profile"]["aadhar"] }}">{{ context["profile"]["uname"] }}</a></h5>
+                    <p class="text"><b>Email: {{ context["profile"]["email"] }}<br></b></p>
+                </div>
+              </div> </div>
+    {% endif %}
+    {% endif %}
+       
+    <!-- Essential javascripts for application to work-->
+    <script src={{ url_for('static',filename="js/jquery-3.2.1.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/popper.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/bootstrap.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/main.js") }}></script>    
+    <!-- The javascript plugin to display page loading on top-->
+    <script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>    
+    <script src={{ url_for('static',filename="js/plugins/jquery.dataTables.min.js") }}></script>
+    <script src={{ url_for('static',filename="js/plugins/dataTables.bootstrap.min.js") }}></script>
+
+{% endblock %}

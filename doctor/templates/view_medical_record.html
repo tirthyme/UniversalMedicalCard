@@ -1,0 +1,105 @@
+
+{% extends "doctor_navigation_template.html" %}
+
+{% block pagetype %} <i class="fa fa-laptop"></i> View Medical Record  {% endblock %}
+
+{% block maincontent %}
+      <div class="row">
+        <div class="col-md-12">
+          <div class="tile">
+            <section class="invoice">
+              <div class="row mb-4">
+                <div class="col-6">
+                  <h2 class="page-header">Medical Report for {{context["patient_data"]["patient_name"]}}</h2><br>
+                  <label><b>Medical ID: {{context["patient_data"]["aadhar"]}}</b></label>
+                </div>
+                <div class="col-6">
+                  <h5 class="text-right">Report Date: {{context["patient_data"]["create_date"]}}</h5>
+                </div>
+              </div>
+              <div class="row invoice-info">
+                <div class="col-6"><b>Doctor</b>
+                  <address><strong>{{ context["doctor_data"]["uname"] }}</strong>
+                  <br>{{ context["doctor_data"]["clinic_addr"] }}<br>Email: {{ context["doctor_data"]["email"] }}<br>
+                  Phone: {{ context["doctor_data"]["uphone"] }}
+                  </address>
+                </div>
+                <div class="col-6"><b>Hospital</b>
+                  <address><strong>{{ context["hospital_data"]["hospital_name"] }}</strong>
+                  <br>{{ context["hospital_data"]["hospital_address"] }}<br>Email: {{ context["hospital_data"]["email"] }}<br>
+                  Phone: {{ context["hospital_data"]["hospital_phone"] }}
+                  </address>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 table-responsive">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Gender: </th>
+                        <th>{{context["patient_data"]["gender"]}}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th>Area</th>
+                        <th>{{context["patient_data"]["area_name"]}}, {{context["patient_data"]["city_name"]}}, {{context["patient_data"]["state_name"]}}-{{context["patient_data"]["pin_code"]}}</th>
+                      </tr>
+                       <tr>
+                        <th>Medical File: </th>
+                        <th><a href="../static/userdata/user_reports/{{context["patient_data"]["medical_file_url"]}}"  target="_blank">Click Here</a></th>
+                      </tr>
+                      <tr>
+                        <th>Primary Diagnosis:</th>
+                        <th>{{context["patient_data"]["primary_diagnosis"]}}</th>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="row d-print-none mt-2">
+                <div class="col-12 text-right"><a class="btn btn-primary" href="javascript:window.print();"><i class="fa fa-print"></i>Print Report</a></div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+      {% if session["did"] == context["doctor_data"]["doctor_id"]%}
+        <div class="tile d-print-none">
+            <div class="tile-body">
+            <form action="/doctor/addmedicaldiagnosis" method="post">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+              <input type="hidden" name="record_id" value="{{context["patient_data"]["record_id"]}}"> 
+              <button class="btn btn-primary">Add medical Diagnosis</button>
+            </form>
+            </div>
+          </div>
+        </div>
+
+        {% endif %}
+
+        <div class="tile d-print-none">
+            <div class="tile-body">
+              <h4>Past Medical Diagnosis</h4><br>
+              <b>
+              {% for data in context["medical_diagnostic_records"]%}
+                <a class="navbar-link" href="/doctor/viewdiagnosis?diag_id={{data["diag_id"]}}">{{data["diag_date"]}}</a><br>
+              {% endfor %}
+              </b>
+            </div>
+          </div>
+        </div>
+
+
+      <!-- Essential javascripts for application to work-->
+      <script src={{ url_for('static',filename="js/jquery-3.2.1.min.js") }}></script>
+      <script src={{ url_for('static',filename="js/popper.min.js") }}></script>
+      <script src={{ url_for('static',filename="js/bootstrap.min.js") }}></script>
+      <script src={{ url_for('static',filename="js/main.js") }}></script>    
+      <!-- The javascript plugin to display page loading on top-->
+      <script src={{ url_for('static',filename="js/plugins/pace.min.js") }}></script>
+      <script src={{ url_for('static',filename="js/plugins/select2.min.js") }}></script>
+       <script>
+       $('#medtests').select2();
+       </script>
+{% endblock %}

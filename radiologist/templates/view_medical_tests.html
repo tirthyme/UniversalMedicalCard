@@ -1,0 +1,59 @@
+{% extends "radiologist_navigation_template.html" %}
+
+{% block pagetype %} <i class="fa fa-laptop"></i> Medical Tests {% endblock %}
+
+{% block maincontent %}
+
+<div class="row">
+        <div class="col-md-12">
+          <div class="tile">
+            <section class="invoice">
+              <div class="row mb-4">
+                <div class="col-6">
+                </div>
+                <div class="col-6">
+                  <h5 class="text-right">Date: {{context["medical_tests"][0]["diag_date"]}}</h5>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 table-responsive">
+                  <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <th>Medical Test</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                      </tr>
+                    {% for data in context["medical_tests"] %}
+                      <tr>
+                        <th>{{data["med_test_name"]}}</th>
+                        <th>{{data["diag_date"]}}</th>
+                        <th>{% if data["file_url"] == "NONE"%}
+                        {% if request.args.get("duplicate") == "true"%}
+                          <div class="alert-danger">Wrong Phone Number Try Again</div>
+                        {% endif %}
+                                <form action="{{url_for("radio_bp.medical_tests")}}" method="post" enctype="multipart/form-data">
+                                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                  <input type="hidden" name="diag_id" value="{{data["diag_id"]}}"/>
+                                  <input type="hidden" name="map_id" value="{{data["map_id"]}}"/>
+                                  <input type="hidden" name="action" value="addmedicaltestfile"/>
+                                  <input type="text"  name="phone" placeholder="Input User Phone" class="form-control" style="margin-bottom: 5px;" maxlength="10" minlength="10">
+                                  <input type="file"  name="image-file" class="form-control" style="margin-bottom: 5px;">
+                                  <button class="btn btn-primary">Submit Test</button>
+                                </form>
+                            {% else %}
+                              <a href="../static/userdata/user_reports/{{data["file_url"]}}"  target="_blank">Click Here</a>
+                            {% endif %}
+                        </th>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+
+{% endblock %}      

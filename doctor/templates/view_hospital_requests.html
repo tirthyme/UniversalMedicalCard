@@ -1,0 +1,40 @@
+{% extends "hospital_navigation_template.html" %}
+
+{% block pagetype %} <i class="fa fa-laptop"></i> View Hospital Requests {% endblock%}
+
+{% block maincontent %}
+
+{% if context["hospital_requests"] != "None"%}
+
+{% for data in context["hospital_requests"] %}
+
+<div class="tile">
+  <div class="timeline-post">
+        <div class="content">
+            <h5><img style="margin-right:3vh;" height="50" width="50" src="../static/userdata/images/{{ data["pfp_url"] }}">
+            	<a href="doctor_profile/{{data["doctor_id"]}}">{{ data["uname"] }}</a></h5>
+            <p class="text"><b>Email: {{ data["email"] }}<br>
+            	Address: {{data["hospital_address"]}}<br>
+            	Request Date: {{data["request_date"]}}<br>
+                {% if data["accepted"] == -1 %}
+                <form action="{{url_for('doctor_bp.viewhospitalrequests')}}" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                	<input type="hidden" name="hid" value="{{data["hos_doc_id"]}}">
+                	<button class="btn btn-primary" name="btn" value="accepted">Accept</button>
+                	<button class="btn btn-danger"  name="btn" value="decline">Decline</button>
+                </form>
+                {% elif data["accepted"] == 0 %}
+                <p class="btn btn-primary">Denied</p>
+                {% else %}
+                <p class="btn btn-primary">Accepted</p>
+                {% endif %}
+            </b> 
+            </p>
+        </div>
+    </div> 
+</div>
+
+{% endfor %}
+
+{% endif %}
+
+{% endblock %}
